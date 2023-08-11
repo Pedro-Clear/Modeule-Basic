@@ -1,42 +1,52 @@
 import React, { Component } from 'react';
-import { 
+import {
   View,
-  StyleSheet, 
-  Text} from 'react-native';
+  Text,
+  StyleSheet,
+  FlatList
+  } from 'react-native';
 
-  import Slider from '@react-native-community/slider';
+import Pessoas from './src/Pessoas';
 
 class App extends Component{
+
   constructor(props){
     super(props);
     this.state = {
-      valor: 0
-    };
-    }
-render(){
-  return(
-    <View style = {styles.container}>
-    <Slider
-      minimumValue={0}
-      maximumValue={100}
-      onValueChange={(valorSelecionado)=>this.setState({valor: valorSelecionado})}
-      value={this.state.valor}
-      minimumTrackTintColor='green'
-      maximumTrackTintColor='red'
-    />
+      lista: [
+        {id: '1', nome:'Matheus', idade:50, email:'matheus@matheus.com'},
+        {id: '2', nome:'Thiago', idade:33, email:'thiago@thiago.com'},
+        {id: '3', nome:'Lucas', idade:20, email:'lucas@lucas.com'},
+        {id: '4', nome:'Henrique', idade:50, email:'Henrique@Henrique.com'},
+        {id: '5', nome:'Thiago', idade:33, email:'thiago@thiago.com'},
+        {id: '6', nome:'Lucas', idade:20, email:'lucas@lucas.com'},
+        {id: '7', nome:'JOSE', idade:33, email:'thiago@thiago.com'},
+        {id: '8', nome:'HENRIQUE', idade:20, email:'lucas@lucas.com'},
 
-    <Text style={{textAlign: 'center', fontSize: 30}}>
-      {this.state.valor.toFixed(0)}
-    </Text>
-    </View>
-    )
+      ]
+    };
   }
+
+  render(){
+    return(
+      <View style={styles.container}> 
+
+      <FlatList
+      data={this.state.lista}
+      keyExtractor={(item)=> item.id}
+      renderItem={ ({item}) => <Pessoas data={item} /> }
+      />
+
+      </View>    
+    );
+  }
+
 }
 const styles = StyleSheet.create({
   container:{
     flex:1,
-    marginTop:150
-  }
-})
+  },
+});
 
 export default App;
+
