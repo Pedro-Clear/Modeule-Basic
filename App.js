@@ -1,48 +1,41 @@
-import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, Button, Modal } from 'react-native';
-import Entrar from './src/Entrar'
+import React, {Component} from "react";
+import { View, StyleSheet, FlatList } from "react-native";
 
-export default class App extends Component {
+import api from "./src/services/api";
+import Filmes from "./src/Filmes";
+
+class App extends Component {
 
   constructor(props){
     super(props);
-    this.state={
-      modalVisible:false
-     };
-
-    this.entrar = this.entrar.bind(this);
-    this.sair = this.sair.bind(this);
-  }
-  entrar(){
-    this.setState({modalVisible: true});
-  }
-  sair(visible){
-    this.setState({modalVisible: visible});
+    this.state = {
+      filmes: []
+    }
   }
 
-  render() {
-    return (
+  async componentDidMount(){
+    const response = await api.get('r-api/?api=filmes');
+    this.setState({
+      filmes: response.data
+    })
+  }
+  render (){
+    return(
       <View style={styles.container}>
-          <Button title="Entrar" onPress={ this.entrar }/>
-
-          <Modal transparent={true} animationType="slide" visible={this.state.modalVisible}>
-            <View style={{margin:15, flex:1, alignItems:'center', justifyContent: 'center'}}>
-               <Entrar fechar={ () => this.sair(false)} />
-            </View>
-          </Modal>
-
+        <FlatList
+        data={this.state.filmes}
+        keyExtractor={item => item.id.toString()}
+        renderItem={({item}) => <Filmes data={item}/>}
+        />
       </View>
-    );
+    )
   }
 }
 
-
-
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#DDD',
-  },
-});
+  container:{
+    flex:1,
+  }
+})
+
+export default App;
